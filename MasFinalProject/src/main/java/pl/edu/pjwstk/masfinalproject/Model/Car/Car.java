@@ -60,7 +60,7 @@ public abstract class Car {
     @EqualsAndHashCode.Exclude
     private Set<Service> services;
 
-    @OneToMany(mappedBy = "car", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "car", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<Review> reviews;

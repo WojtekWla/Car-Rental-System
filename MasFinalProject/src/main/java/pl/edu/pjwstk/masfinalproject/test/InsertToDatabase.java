@@ -1,9 +1,7 @@
 package pl.edu.pjwstk.masfinalproject.test;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.PersistenceContext;
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import pl.edu.pjwstk.masfinalproject.Model.*;
@@ -16,19 +14,14 @@ import pl.edu.pjwstk.masfinalproject.Model.Person.Employee;
 import pl.edu.pjwstk.masfinalproject.Model.Person.User;
 import pl.edu.pjwstk.masfinalproject.repository.*;
 
-import javax.swing.text.html.Option;
 import java.time.LocalDate;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 
 @Component
 @AllArgsConstructor
 public class InsertToDatabase {
-    private EntityManagerFactory emf;
-
     private EmployeeRepository employeeRepository;
     private PersonRepository personRepository;
     private UserRepository userRepository;
@@ -46,6 +39,11 @@ public class InsertToDatabase {
     private EntityManager entityManager;
 
     public void insertData() {
+        Iterable<Employee> employees = employeeRepository.findAll();
+        if (employees.iterator().hasNext()) {
+            return;
+        }
+
         Employee employee = Employee.builder()
                 .name("John")
                 .surname("Doe")
@@ -277,13 +275,13 @@ public class InsertToDatabase {
     public void getRents() {
         System.out.println("Rents");
         Iterable<Rent> rents = rentRepository.findAll();
-
         rents.forEach(rent -> {
             System.out.println(rent);
-            System.out.println("Cars: " + rent.getCars());
             System.out.println("Person: " + rent.getPerson());
             System.out.println("Discount: " + rent.getDiscount());
             System.out.println("Insurance: " + rent.getInsurance());
+            Iterable<Car> cars = carRepository.findByRentId(rent.getId());
+            System.out.println("Cars: " + cars);
         });
     }
 
@@ -299,6 +297,7 @@ public class InsertToDatabase {
 
     public void getServices()
     {
+        System.out.println("Service, mechanic, car");
         Iterable<Service> services = serviceRepository.findAll();
         services.forEach(service -> {
             System.out.println(service);
