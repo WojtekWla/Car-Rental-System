@@ -1,10 +1,7 @@
 package pl.edu.pjwstk.masfinalproject.Model.Person;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import pl.edu.pjwstk.masfinalproject.Model.Rent;
@@ -33,20 +30,25 @@ public abstract class Person {
     @NotBlank(message = "name cannot be empty")
     protected String surname;
 
+    @NotNull(message = "pesel cannot be null")
+    @Size(min = 11, max = 11, message = "pesel has to have 11 digits")
+    protected String pesel;
+
     @NotNull(message = "telephone cannot be null")
     @Size(min=9, max = 9, message = "telephone number must have 9 digits")
     protected String telephone;
 
     @NotNull(message = "email cannot be null")
     @Size(min = 3, message = "email must contain at least 3 letters")
-    @Email
+    @Email(message = "must be in email format")
     protected String email;
 
     @NotNull(message = "birth date cannot be null")
+    @Past(message = "birth date must be in the past")
     protected LocalDate birthDate;
 
     @NotNull(message = "gender cannot be null")
-    @NotBlank(message = "geneder cannot be empty")
+    @NotBlank(message = "gender cannot be empty")
     protected String gender;
 
     @NotNull(message = "residentialAddress cannot be null")

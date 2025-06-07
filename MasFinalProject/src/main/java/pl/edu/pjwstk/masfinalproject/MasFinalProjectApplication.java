@@ -14,7 +14,7 @@ public class MasFinalProjectApplication {
 
 		insertToDatabase.insertData();
 
-		insertToDatabase.getData();
+//		insertToDatabase.getData();
 	}
 
 }

@@ -1,9 +1,7 @@
 package pl.edu.pjwstk.masfinalproject.Model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.util.List;
@@ -24,6 +22,15 @@ public class Mechanic {
     @NotBlank(message = "name cannot be empty")
     private String name;
 
+    @NotNull(message = "telephone cannot be null")
+    @Size(min=9, max = 9, message = "telephone number must have 9 digits")
+    protected String telephone;
+
+    @NotNull(message = "email cannot be null")
+    @Size(min = 3, message = "email must contain at least 3 letters")
+    @Email(message = "must be in email format")
+    protected String email;
+
     @NotNull(message = "name cannot be null")
     @NotBlank(message = "name cannot be empty")
     private String location;
@@ -39,6 +46,4 @@ public class Mechanic {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<Service> services;
-
-
 }

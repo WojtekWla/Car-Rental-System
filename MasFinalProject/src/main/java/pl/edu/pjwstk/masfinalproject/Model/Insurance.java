@@ -32,5 +32,5 @@ public class Insurance {
     @OneToMany(mappedBy = "insurance", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private Set<Rent> rents = new HashSet<>();
+    private Set<Rent> rents;
 }

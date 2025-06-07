@@ -21,7 +21,7 @@ import java.time.LocalDate;
 public class Service {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id; //later to be deleted because it connects many to many
+    private int id;
 
     @NotNull(message = "date of service cannot be null")
     @PastOrPresent(message = "date of service must be in the past or now")

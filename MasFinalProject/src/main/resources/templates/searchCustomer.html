@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head xmlns:th="http://www.thymeleaf.org">
+    <meta charset="UTF-8">
+    <title>Main page</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/stylesheet/style.css}" href="../static/stylesheet/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body>
+    <div class="my-navbar">
+        <img class="logo" src="/images/logo.png" alt="logo">
+        <a th:href="@{/}">Main page</a>
+        <a th:href="@{/checkCarAvailability}">Add Rent</a>
+    </div>
+
+    <h1>Insert Customer Information</h1>
+    <div class="container">
+    <form th:action="@{/findPerson}" method="post" th:object="${person}">
+        <div class="mb-3">
+            <label for="inputName" class="form-label">Name</label>
+            <input type="text" class="form-control" id="inputName" name="name" placeholder="Name" th:field="*{name}" required>
+        </div>
+        <div class="mb-3">
+            <label for="inputSurname" class="form-label">Surname</label>
+            <input type="text" class="form-control" id="inputSurname" name="surname" placeholder="Surname" th:field="*{surname}" required>
+        </div>
+        <div class="mb-3">
+            <label for="inputPesel" class="form-label">PESEL</label>
+            <input type="text" class="form-control" id="inputPesel" name="pesel" th:field="*{pesel}" placeholder="PESEL"
+                   required minlength="11" maxlength="11" pattern="\d{11}">
+        </div>
+        <div th:if="${message}" class="error-message">
+            <p th:utext="${message}"></p>
+        </div>
+        <button type="submit" class="btn btn-primary">Find Customer</button>
+    </form>
+    </div>
+</body>
+</html>

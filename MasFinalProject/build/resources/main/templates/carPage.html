@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head xmlns:th="http://www.thymeleaf.org">
+    <meta charset="UTF-8">
+    <title>Car Page</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/stylesheet/style.css}" href="../static/stylesheet/style.css">
+</head>
+<body>
+    <div class="my-navbar">
+        <img class="logo" src="/images/logo.png" alt="logo">
+        <a th:href="@{/}">Main page</a>
+        <a th:href="@{/checkCarAvailability}">Add Rent</a>
+    </div>
+    <h1>Car details</h1>
+    <div class="container">
+        <div class="section">
+            <p><span class="label">Id:</span> <span th:text="${car.getId()}"></span></p>
+            <p><span class="label">Brand:</span> <span th:text="${car.getBrand()}"></span></p>
+            <p><span class="label">Model:</span> <span th:text="${car.getModel()}"></span></p>
+            <p><span class="label">Type of car:</span> <span th:text="${car.getCarType()}"></span></p>
+            <p><span class="label">Status:</span> <span th:text="${car.getCarStatus()}"></span></p>
+            <p><span class="label">Rent price:</span> <span th:text="${car.getRentPrice()}"></span></p>
+        </div>
+    </div>
+    <div class="content-wrapper" th:if="${!rents.isEmpty()}">
+        <h3>Rents of car</h3>
+        <table>
+            <thead>
+            <tr>
+                <th>Start date</th>
+                <th>End date</th>
+                <th>Rented cars</th>
+                <th>Go to rent details</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="rent : ${rents}">
+                <td th:text="${rent.getRentDate()}"></td>
+                <td th:text="${rent.getReturnDate()}"></td>
+                <td>
+                    <li th:each="car : ${rent.getRentedCars()}" th:text="${car.brand + ' ' + car.model}"></li>
+                </td>
+                <td>
+                    <a th:href="|/rent/${rent.getId()}|">  Go to rent</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

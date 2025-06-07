@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rent</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/stylesheet/style.css}" href="../static/stylesheet/style.css">
+</head>
+<body>
+
+    <div class="my-navbar">
+        <img class="logo" src="/images/logo.png" alt="logo">
+        <a th:href="@{/}">Main page</a>
+        <a th:href="@{/checkCarAvailability}">Add Rent</a>
+    </div>
+
+    <h1>Rent Details</h1>
+
+    <div class="container">
+
+        <div class="section">
+            <h2>General Info</h2>
+            <p><span class="label">Start Date:</span> <span th:text="${rent.getRentDate()}"></span></p>
+            <p><span class="label">Return Date:</span> <span th:text="${rent.getReturnDate()}"></span></p>
+            <p><span class="label">Price (without discount and insurance):</span> <span th:text="${rent.getPrice()}"></span></p>
+        </div>
+
+        <div class="section" th:if="${rent.getDiscount() != null}">
+            <h2>Discount</h2>
+            <p><span class="label">Type of discount:</span> <span th:text="${rent.getDiscount().getTypeOfDiscount()}"></span></p>
+            <p><span class="label">Description:</span> <span th:text="${rent.getDiscount().getDescription()}"></span></p>
+            <p><span class="label">Percentage:</span> <span th:text="${rent.getDiscount().getPercentage()} + '%'"></span></p>
+        </div>
+
+        <div class="section" th:if="${rent.getInsurance() != null}">
+            <h2>Insurance</h2>
+            <p><span class="label">Name:</span> <span th:text="${rent.getInsurance().getName()}"></span></p>
+            <p><span class="label">Description:</span> <span th:text="${rent.getInsurance().getDescription()}"></span></p>
+            <p><span class="label">Price:</span> <span th:text="${rent.getInsurance().getPrice()}"></span></p>
+        </div>
+
+        <div class="section">
+            <h2>Rented Cars</h2>
+            <ul>
+                <li th:each="car : ${rent.getRentedCars()}">
+                    <span th:text="${car.brand} + ' ' + ${car.model} + ' (' + ${car.carType} + ')'"></span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Final report</h2>
+            <p><span class="label">Final price:</span> <span th:text="${rent.getFinalPrice()}"></span></p>
+            <p><span class="label">Amount of rented cars:</span> <span th:text="${rent.getRentedCars().size()}"></span></p>
+            <p th:if="${rent.getInsurance() != null}"><span class="label">Insurance:</span> <span th:text="${rent.getInsurance().getName()}"></span></p>
+            <p th:if="${rent.getDiscount() != null}"><span class="label">Discount:</span> <span th:text="${rent.getDiscount().getTypeOfDiscount()}"></span></p>
+        </div>
+
+    </div>
+</body>
+</html>

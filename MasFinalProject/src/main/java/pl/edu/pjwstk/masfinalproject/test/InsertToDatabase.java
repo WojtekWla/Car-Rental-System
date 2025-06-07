@@ -6,15 +6,19 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import pl.edu.pjwstk.masfinalproject.Model.*;
 import pl.edu.pjwstk.masfinalproject.Model.Car.Car;
-import pl.edu.pjwstk.masfinalproject.Model.Car.ElectricEngine;
-import pl.edu.pjwstk.masfinalproject.Model.Car.OilEngine;
+import pl.edu.pjwstk.masfinalproject.Model.Car.EngineType;
 import pl.edu.pjwstk.masfinalproject.Model.Enum.CarStatus;
 import pl.edu.pjwstk.masfinalproject.Model.Enum.CarType;
-import pl.edu.pjwstk.masfinalproject.Model.Person.Employee;
-import pl.edu.pjwstk.masfinalproject.Model.Person.User;
+import pl.edu.pjwstk.masfinalproject.Model.Person.Employee.Admin;
+import pl.edu.pjwstk.masfinalproject.Model.Person.Employee.Consultant;
+import pl.edu.pjwstk.masfinalproject.Model.Person.Employee.Employee;
+import pl.edu.pjwstk.masfinalproject.Model.Person.Customer;
+import pl.edu.pjwstk.masfinalproject.Model.Person.Employee.TypeOfContract.FullTime;
+import pl.edu.pjwstk.masfinalproject.Model.Person.Employee.TypeOfContract.PartTime;
 import pl.edu.pjwstk.masfinalproject.repository.*;
 
 import java.time.LocalDate;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
@@ -24,12 +28,14 @@ import java.util.Set;
 public class InsertToDatabase {
     private EmployeeRepository employeeRepository;
     private PersonRepository personRepository;
-    private UserRepository userRepository;
+    private AdminRepository adminRepository;
+    private ConsultantRepository consultantRepository;
+    private FullTimeRepository fullTimeRepository;
+    private PartTimeRepository partTimeRepository;
+    private CustomerRepository customerRepository;
     private DiscountRepository discountRepository;
     private InsuranceRepository insuranceRepository;
     private CarRepository carRepository;
-    private ElectricRepository electricRepository;
-    private OilEngineRepository oilEngineRepository;
     private MechanicRepository mechanicRepository;
     private ReviewRepository reviewRepository;
     private RentRepository rentRepository;
@@ -44,34 +50,124 @@ public class InsertToDatabase {
             return;
         }
 
-        Employee employee = Employee.builder()
-                .name("John")
-                .surname("Doe")
-                .telephone("123456789")
-                .email("john.doe@example.com")
-                .birthDate(LocalDate.of(1990, 1, 1))
+        FullTime adminContract = FullTime.builder()
+                .salary(4800)
+                .bonus(600)
+                .build();
+
+        Admin admin = Admin.builder()
+                .name("David")
+                .surname("Brown")
+                .telephone("456789123")
+                .pesel("44051401359")
+                .email("david.brown@example.com")
+                .birthDate(LocalDate.of(1982, 12, 30))
                 .gender("Male")
-                .residentialAddress("123 Main St")
-                .salary(75000)
+                .residentialAddress("321 Pine St, Leeds")
+                .hireDate(LocalDate.of(2018, 9, 5))
+                .assignedRegion("Northern Region")
                 .build();
 
 
-        Employee employee2 = Employee.builder()
-                .name("Anna")
+        PartTime consultantContract1 = PartTime.builder()
+                .hoursPerWeek(25)
+                .terminationDate(LocalDate.now().plusMonths(2))
+                .build();
+
+        Consultant consultant1 = Consultant.builder()
+                .name("Alice")
                 .surname("Smith")
-                .telephone("987654321")
-                .email("anna.smith@example.com")
-                .birthDate(LocalDate.of(1985, 5, 15))
+                .pesel("02070803628")
+                .telephone("123456789")
+                .email("alice.smith@example.com")
+                .birthDate(LocalDate.of(1990, 5, 10))
                 .gender("Female")
-                .residentialAddress("456 Elm St")
-                .salary(62000)
+                .residentialAddress("123 Main St, London")
+                .hireDate(LocalDate.of(2020, 3, 1))
+                .languages(List.of("English", "German"))
+                .position("Senior Consultant")
                 .build();
 
 
-        User user1 = User.builder()
+
+        FullTime consultantContract2 = FullTime.builder()
+                .salary(5200)
+                .bonus(750)
+                .build();
+
+        Consultant consultant2 = Consultant.builder()
+                .name("Bob")
+                .surname("Johnson")
+                .pesel("99123112346")
+                .telephone("987654321")
+                .email("bob.johnson@example.com")
+                .birthDate(LocalDate.of(1985, 8, 15))
+                .gender("Male")
+                .residentialAddress("456 Elm St, Manchester")
+                .hireDate(LocalDate.of(2019, 7, 20))
+                .languages(List.of("English", "Spanish"))
+                .position("Consultant")
+                .build();
+
+        PartTime consultantContract3 = PartTime.builder()
+                .hoursPerWeek(30)
+                .terminationDate(LocalDate.now().plusWeeks(8))
+                .build();
+
+        Consultant consultant3 = Consultant.builder()
+                .name("Claire")
+                .surname("Williams")
+                .pesel("05261278903")
+                .telephone("321654987")
+                .email("claire.williams@example.com")
+                .birthDate(LocalDate.of(1993, 1, 5))
+                .gender("Female")
+                .residentialAddress("789 Oak St, Bristol")
+                .hireDate(LocalDate.of(2021, 2, 10))
+                .languages(List.of("English", "French"))
+                .position("Junior Consultant")
+                .build();
+
+
+
+        adminRepository.save(admin);
+        fullTimeRepository.save(adminContract);
+
+        consultantRepository.save(consultant1);
+        consultantRepository.save(consultant2);
+        consultantRepository.save(consultant3);
+
+        partTimeRepository.save(consultantContract1);
+        fullTimeRepository.save(consultantContract2);
+        partTimeRepository.save(consultantContract3);
+
+        adminContract.setEmployee(admin);
+        consultantContract3.setEmployee(consultant3);
+        consultantContract1.setEmployee(consultant1);
+        consultantContract2.setEmployee(consultant2);
+
+        admin.setTypeOfContract(adminContract);
+        consultant1.setTypeOfContract(consultantContract1);
+        consultant2.setTypeOfContract(consultantContract2);
+        consultant3.setTypeOfContract(consultantContract3);
+
+        adminRepository.save(admin);
+        fullTimeRepository.save(adminContract);
+
+        consultantRepository.save(consultant1);
+        consultantRepository.save(consultant2);
+        consultantRepository.save(consultant3);
+
+        partTimeRepository.save(consultantContract1);
+        fullTimeRepository.save(consultantContract2);
+        partTimeRepository.save(consultantContract3);
+
+
+        Customer customer1 = Customer.builder()
                 .name("Alice")
                 .surname("Johnson")
                 .telephone("123456789")
+                .pesel("06120317480")
                 .email("alice.johnson@example.com")
                 .birthDate(LocalDate.of(1995, 3, 15))
                 .gender("Female")
@@ -80,9 +176,10 @@ public class InsertToDatabase {
                 .points(120)
                 .build();
 
-        User user2 = User.builder()
+        Customer customer2 = Customer.builder()
                 .name("Bob")
                 .surname("Miller")
+                .pesel("83040514621")
                 .telephone("987654321")
                 .email("bob.miller@example.com")
                 .birthDate(LocalDate.of(1988, 11, 23))
@@ -94,15 +191,26 @@ public class InsertToDatabase {
         Discount summerDiscount = Discount.builder()
                 .typeOfDiscount("Seasonal")
                 .description("Summer sale discount for all vehicle types")
+                .percentage(10)
+                .build();
+
+        Discount seniorDiscount = Discount.builder()
+                .typeOfDiscount("Senior Discount")
+                .description("Discount for customers above 65 years old")
+                .percentage(10)
+                .build();
+
+        Discount goldenMemberDiscount = Discount.builder()
+                .typeOfDiscount("Golden Member Discount")
+                .description("Discount for customers with more than 50 points")
                 .percentage(20)
                 .build();
 
-        Discount loyaltyDiscount = Discount.builder()
-                .typeOfDiscount("Loyalty")
-                .description("Loyal customers receive a discount")
-                .percentage(15)
+        Discount platinumMemberDiscount = Discount.builder()
+                .typeOfDiscount("Platinum Member Discount")
+                .description("Discount for customers with more than 100 points")
+                .percentage(30)
                 .build();
-
 
         Insurance basicInsurance = Insurance.builder()
                 .name("Basic Coverage")
@@ -116,57 +224,66 @@ public class InsertToDatabase {
                 .price(300)
                 .build();
 
-        ElectricEngine tesla = ElectricEngine.builder()
-                .brand("Tesla")
-                .model("Model S")
-                .rentPrice(500)
-                .carStatus(CarStatus.AVAILABLE)
-                .carType(CarType.SPORT)
-                .travelledDistance(15000)
-                .maximumRange(600)
-                .build();
-
-        ElectricEngine nissanLeaf = ElectricEngine.builder()
-                .brand("Nissan")
-                .model("Leaf")
-                .rentPrice(300)
+        Car car1 = Car.builder()
+                .brand("Toyota")
+                .model("Corolla")
+                .rentPrice(200)
                 .carStatus(CarStatus.AVAILABLE)
                 .carType(CarType.COMBI)
-                .travelledDistance(22000)
-                .maximumRange(270)
+                .travelledDistance(5000)
+                .engines(EnumSet.of(EngineType.OilEngine))
+                .benzineType("95")
+                .manufacturerName("Toyota Motors")
                 .build();
 
-
-        OilEngine bmwDiesel = OilEngine.builder()
+        Car car2 = Car.builder()
                 .brand("BMW")
-                .model("320d")
+                .model("X5")
+                .rentPrice(300)
+                .carStatus(CarStatus.AVAILABLE)
+                .carType(CarType.SUV)
+                .travelledDistance(7000)
+                .engines(EnumSet.of(EngineType.OilEngine))
+                .benzineType("98")
+                .manufacturerName("BMW Group")
+                .build();
+
+        Car car3 = Car.builder()
+                .brand("Tesla")
+                .model("Model S")
                 .rentPrice(400)
                 .carStatus(CarStatus.AVAILABLE)
                 .carType(CarType.SPORT)
-                .travelledDistance(80000)
-                .oilType("Diesel")
-                .manufacturerName("BMW AG")
+                .travelledDistance(1000)
+                .engines(EnumSet.of(EngineType.ElectricEngine))
+                .maximumRange(500)
                 .build();
 
-        OilEngine audiPetrol = OilEngine.builder()
-                .brand("Audi")
-                .model("A4")
-                .rentPrice(420)
-                .carStatus(CarStatus.RENTED)
+        Car car4 = Car.builder()
+                .brand("Toyota")
+                .model("Prius Hybrid")
+                .rentPrice(250)
+                .carStatus(CarStatus.AVAILABLE)
                 .carType(CarType.SPORT)
-                .travelledDistance(50000)
-                .oilType("Petrol")
-                .manufacturerName("Audi AG")
+                .travelledDistance(3000)
+                .engines(EnumSet.of(EngineType.OilEngine, EngineType.ElectricEngine))
+                .benzineType("95")
+                .manufacturerName("Toyota Motors")
+                .maximumRange(300)
                 .build();
 
         Mechanic mechanic1 = Mechanic.builder()
                 .name("John Mechanic")
+                .telephone("123456789")
+                .email("john.mechanic@example.com")
                 .location("Warsaw")
                 .providedServices(List.of("Engine repair", "Oil change", "Brake service"))
                 .build();
 
         Mechanic mechanic2 = Mechanic.builder()
                 .name("Eva Fixit")
+                .telephone("987654321")
+                .email("eva.mechanic@example.com")
                 .location("Gdansk")
                 .providedServices(List.of("Transmission diagnostics", "AC service"))
                 .build();
@@ -175,56 +292,69 @@ public class InsertToDatabase {
         Rent rent = Rent.builder()
                 .startDate(LocalDate.now().plusDays(1))
                 .endDate(LocalDate.now().plusDays(5))
-                .person(user1)
+                .person(customer1)
                 .discount(summerDiscount)
                 .insurance(basicInsurance)
-                .cars(Set.of(bmwDiesel, audiPetrol))
+                .cars(Set.of(car1, car2))
                 .build();
 
-        employeeRepository.save(employee);
-        employeeRepository.save(employee2);
-        userRepository.save(user1);
-        userRepository.save(user2);
+        Rent rent2 = Rent.builder()
+                .startDate(LocalDate.now().plusDays(10))
+                .endDate(LocalDate.now().plusDays(15))
+                .person(customer1)
+                .discount(summerDiscount)
+                .insurance(premiumInsurance)
+                .cars(Set.of(car3, car1))
+                .build();
+
+        customerRepository.save(customer1);
+        customerRepository.save(customer2);
         discountRepository.save(summerDiscount);
-        discountRepository.save(loyaltyDiscount);
+        discountRepository.save(seniorDiscount);
+        discountRepository.save(goldenMemberDiscount);
+        discountRepository.save(platinumMemberDiscount);
         insuranceRepository.save(basicInsurance);
         insuranceRepository.save(premiumInsurance);
-        electricRepository.save(tesla);
-        electricRepository.save(nissanLeaf);
-        oilEngineRepository.save(audiPetrol);
-        oilEngineRepository.save(bmwDiesel);
+        carRepository.save(car1);
+        carRepository.save(car2);
+        carRepository.save(car3);
+        carRepository.save(car4);
         mechanicRepository.save(mechanic1);
         mechanicRepository.save(mechanic2);
 
         rentRepository.save(rent);
+        rentRepository.save(rent2);
 
-        bmwDiesel.setRents(Set.of(rent));
-        audiPetrol.setRents(Set.of(rent));
-        user1.setRents(Set.of(rent));
+        car1.setRents(Set.of(rent, rent2));
+        car2.setRents(Set.of(rent));
+        car3.setRents(Set.of(rent2));
+        customer1.setRents(Set.of(rent, rent2));
 
-        oilEngineRepository.save(bmwDiesel);
-        oilEngineRepository.save(audiPetrol);
-        userRepository.save(user1);
+        carRepository.save(car1);
+        carRepository.save(car2);
+        carRepository.save(car3);
+        carRepository.save(car4);
+        customerRepository.save(customer1);
 
         Review review1 = Review.builder()
                 .message("Great ride, smooth and efficient!")
                 .publishDate(LocalDate.now())
-                .person(user1)
-                .car(audiPetrol)
+                .person(customer1)
+                .car(car1)
                 .build();
 
         Review review2 = Review.builder()
                 .message("Battery range could be better, but overall a nice experience.")
                 .publishDate(LocalDate.now())
-                .person(user1)
-                .car(bmwDiesel)
+                .person(customer1)
+                .car(car2)
                 .build();
 
         Service service1 = Service.builder()
                 .dateOfService(LocalDate.of(2025, 5, 1))
                 .price(150)
                 .typeOfService("Oil Change")
-                .car(bmwDiesel)
+                .car(car1)
                 .mechanic(mechanic1)
                 .build();
 
@@ -232,7 +362,7 @@ public class InsertToDatabase {
                 .dateOfService(LocalDate.of(2025, 5, 11))
                 .price(150)
                 .typeOfService("Engine fix")
-                .car(bmwDiesel)
+                .car(car1)
                 .mechanic(mechanic1)
                 .build();
 
@@ -240,7 +370,7 @@ public class InsertToDatabase {
                 .dateOfService(LocalDate.of(2025, 5, 10))
                 .price(300)
                 .typeOfService("Brake Service")
-                .car(tesla)
+                .car(car2)
                 .mechanic(mechanic2)
                 .build();
 
@@ -268,7 +398,7 @@ public class InsertToDatabase {
     }
 
     public void getUsers() {
-        Iterable<User> users =  userRepository.findAll();
+        Iterable<Customer> users =  customerRepository.findAll();
         users.forEach(System.out::println);
     }
 

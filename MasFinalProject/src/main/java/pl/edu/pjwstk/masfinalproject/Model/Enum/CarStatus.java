@@ -2,6 +2,12 @@ package pl.edu.pjwstk.masfinalproject.Model.Enum;
 
 public enum CarStatus {
     AVAILABLE,
+    RESERVED,
     RENTED,
-    SERVICE
+    RETURNED,
+    CLEANED,
+    MALFUNCTION,
+    SERVICE_REQUIRED,
+    SERVICE,
+    TO_DESTROY
 }

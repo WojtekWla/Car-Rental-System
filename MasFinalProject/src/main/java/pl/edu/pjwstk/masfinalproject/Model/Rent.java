@@ -9,6 +9,7 @@ import pl.edu.pjwstk.masfinalproject.Model.Car.Car;
 import pl.edu.pjwstk.masfinalproject.Model.Person.Person;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Set;
 
 @Entity
@@ -52,4 +53,27 @@ public class Rent {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<Car> cars;
+
+    public double getPrice() {
+        return cars
+                .stream()
+                .mapToDouble(car -> car.getRentPrice() * getDays())
+                .sum();
+    }
+
+    public double getFinalPrice() {
+        double price = getPrice();
+
+        if(discount != null) {
+            price -= price * (discount.getPercentage()/100.0);
+        }
+        if(insurance != null) {
+            price = price + insurance.getPrice();
+        }
+        return price;
+    }
+
+    private long getDays() {
+        return ChronoUnit.DAYS.between(startDate, endDate);
+    }
 }

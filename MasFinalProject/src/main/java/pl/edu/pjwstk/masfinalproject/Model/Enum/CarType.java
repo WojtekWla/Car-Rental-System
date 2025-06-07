@@ -5,3 +5,4 @@ public enum CarType {
     COMBI,
     SPORT
 }
+ 
