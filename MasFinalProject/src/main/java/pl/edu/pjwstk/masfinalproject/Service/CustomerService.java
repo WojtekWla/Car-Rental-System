@@ -7,11 +7,9 @@ import pl.edu.pjwstk.masfinalproject.repository.CustomerRepository;
 @Service
 public class CustomerService {
     private CustomerRepository customerRepository;
-    private ObjectMapper objectMapper;
 
-    public CustomerService(CustomerRepository customerRepository, ObjectMapper objectMapper) {
+    public CustomerService(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
-        this.objectMapper = objectMapper;
     }
 
     public boolean checkCustomerExistence(CustomerSearchDTO customerSearchDTO) {

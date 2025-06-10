@@ -49,7 +49,7 @@ public class Rent {
     @EqualsAndHashCode.Exclude
     private Insurance insurance;
 
-    @ManyToMany(mappedBy = "rents", fetch = FetchType.LAZY)
+    @ManyToMany
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<Car> cars;

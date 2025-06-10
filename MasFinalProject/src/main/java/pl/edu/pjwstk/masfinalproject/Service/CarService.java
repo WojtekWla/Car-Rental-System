@@ -30,12 +30,8 @@ public class CarService {
         return result;
     }
 
-    public CarDTO getCarById(int id) {
-        Optional<Car> car = carRepository.findById(id);
-        if(car.isPresent()) {
-            return objectMapper.mapCarToCarDTO(car.get());
-        }
-        throw new RuntimeException("Car not found");
+    public Car getCarById(int id) {
+        return carRepository.findById(id).orElse(null);
     }
 
     public boolean checkCarAvailability() {
@@ -67,6 +63,10 @@ public class CarService {
 
     public void changeCarStateTo(CarStatus carStatus, int carId) {
         carRepository.updateCarStatus(carStatus, carId);
+    }
+
+    public void save(Car car) {
+        carRepository.save(car);
     }
 
 }

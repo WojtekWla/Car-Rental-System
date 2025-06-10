@@ -29,7 +29,7 @@ public class Insurance {
     @Positive(message = "price must be positive")
     private int price;
 
-    @OneToMany(mappedBy = "insurance", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "insurance", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<Rent> rents;

@@ -2,11 +2,13 @@ package pl.edu.pjwstk.masfinalproject.Model.Person.Employee.TypeOfContract;
 
 
 import jakarta.annotation.Nullable;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
 import jakarta.validation.constraints.Min;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import pl.edu.pjwstk.masfinalproject.Model.Person.Employee.Employee;
 
 @EqualsAndHashCode(callSuper = false)
 @Entity
@@ -14,6 +16,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
+@DiscriminatorValue("fullTime")
 public class FullTime extends TypeOfContract {
     @Min(value = 1000, message = "salary must be at least 1000")
     private int salary;
@@ -21,4 +24,10 @@ public class FullTime extends TypeOfContract {
     @Nullable
     @Min(value = 0, message = "bonus cannot be negative")
     private Integer bonus;
+
+    @Override
+    public void giveRaise(int raise) {
+        if(raise < 0) throw new IllegalArgumentException("raise cannot be negative");
+        salary += raise;
+    }
 }

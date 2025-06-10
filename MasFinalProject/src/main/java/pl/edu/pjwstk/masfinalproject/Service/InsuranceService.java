@@ -5,11 +5,9 @@ import pl.edu.pjwstk.masfinalproject.Model.Insurance;
 import pl.edu.pjwstk.masfinalproject.repository.InsuranceRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class InsuranceService {
-
     private InsuranceRepository insuranceRepository;
 
     public InsuranceService(InsuranceRepository insuranceRepository) {
@@ -22,6 +20,10 @@ public class InsuranceService {
 
     public Insurance getInsuranceById(int id) {
         return insuranceRepository.findById(id).orElse(null);
+    }
+
+    public void save(Insurance insurance) {
+        insuranceRepository.save(insurance);
     }
 }
 

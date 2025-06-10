@@ -68,7 +68,7 @@ public class Car {
     @Nullable
     private String manufacturerName;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "cars", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<Rent> rents;

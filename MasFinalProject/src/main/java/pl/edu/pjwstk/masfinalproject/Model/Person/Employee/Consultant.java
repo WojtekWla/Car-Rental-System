@@ -27,4 +27,9 @@ public class Consultant extends Employee{
     @NotNull(message = "position cannot be null")
     @NotEmpty(message = "position cannot be empty")
     private String position;
+
+    public void addLanguage(String language) {
+        if(languages == null || languages.isEmpty()) { throw new IllegalArgumentException("languages cannot be empty"); }
+        languages.add(language);
+    }
 }

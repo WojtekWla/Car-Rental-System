@@ -102,6 +102,12 @@ a:hover {
 }
 
 .container-error {
+    display: flex;
+    flex-direction: column; /* Ensures vertical stacking */
+    align-items: center;    /* Centers horizontally */
+    justify-content: center; /* Centers vertically */
+    min-height: 300px;      /* Adjust as needed */
+    text-align: center;
     max-width: 800px;
     max-height: 500px;
     margin: 2rem auto;
@@ -139,7 +145,33 @@ h2 {
     font-weight: bold;
 }
 
+.date-picker {
+    width: 20% !important;
+    min-width: 150px;
+}
+
 .error-message {
     color: red;
     font-weight: bold;
+}
+
+.go-back-link {
+    background-color: #016bce;
+    color: white;
+    margin: 20px;
+    padding: 14px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 5px;
+}
+
+.go-back-link:hover, .go-back-link:active {
+    background-color: #34495e;
+    color: white;
+}
+
+.center {
+    margin: auto;
+    width: 27%;
 }

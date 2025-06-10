@@ -1,6 +1,7 @@
 package pl.edu.pjwstk.masfinalproject.Controller;
 
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,7 @@ import pl.edu.pjwstk.masfinalproject.DTO.CarDTO;
 import pl.edu.pjwstk.masfinalproject.DTO.InsuranceDTO;
 import pl.edu.pjwstk.masfinalproject.DTO.PersonDTO;
 import pl.edu.pjwstk.masfinalproject.DTO.RentDTO;
+import pl.edu.pjwstk.masfinalproject.Model.Car.Car;
 import pl.edu.pjwstk.masfinalproject.Model.Discount;
 import pl.edu.pjwstk.masfinalproject.Model.Enum.CarStatus;
 import pl.edu.pjwstk.masfinalproject.Model.Insurance;
@@ -24,30 +26,31 @@ import java.time.LocalDate;
 import java.util.*;
 
 @Controller()
+@AllArgsConstructor
 public class CarManagerController {
 
-    private CarService carService;
-    private RentService rentService;
-    private PersonService personService;
-    private InsuranceService insuranceService;
-    private DiscountService discountService;
+    private final CarService carService;
+    private final RentService rentService;
+    private final PersonService personService;
+    private final InsuranceService insuranceService;
+    private final DiscountService discountService;
+    private final EmployeeService employeeService;
 
-    private RentAdd rentAdd;
-    private ObjectMapper objectMapper;
+    private final RentAdd rentAdd;
+    private final ObjectMapper objectMapper;
 
-    public CarManagerController(CarService carService, RentService rentService, PersonService personService, InsuranceService insuranceService, DiscountService discountService, RentAdd rentAdd, ObjectMapper objectMapper) {
-        this.carService = carService;
-        this.rentService = rentService;
-        this.personService = personService;
-        this.insuranceService = insuranceService;
-        this.discountService = discountService;
-        this.rentAdd = rentAdd;
-        this.objectMapper = objectMapper;
-    }
 
 
     @GetMapping("/")
     public String mainPage(Model model) {
+
+        try {
+            employeeService.changeToPartTimeEmployee(1, 11, 30, LocalDate.of(2030, 1,1));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        revertSessionChanges();
         List<CarDTO> cars = carService.getAllCars();
         model.addAttribute("cars", cars);
 
@@ -56,13 +59,17 @@ public class CarManagerController {
 
     @GetMapping("/car/{id}")
     public String carPage(Model model, @PathVariable int id) {
-        CarDTO car = carService.getCarById(id);
-        List<RentDTO> rentDTOS = objectMapper.mapAllRentsToRentDTO(rentService.getAllCarsRents(car.getId()));
+        Car car = carService.getCarById(id);
+        if(car != null) {
+            CarDTO carDTO = objectMapper.mapCarToCarDTO(car);
+            List<RentDTO> rentDTOS = objectMapper.mapAllRentsToRentDTO(rentService.getAllCarsRents(car.getId()));
 
-        model.addAttribute("car", car);
-        model.addAttribute("rents", rentDTOS);
+            model.addAttribute("car", carDTO);
+            model.addAttribute("rents", rentDTOS);
 
-        return "carPage";
+            return "carPage";
+        }
+        return "redirect:/errorPage";
     }
 
     @GetMapping("/rent/{id}")
@@ -79,6 +86,7 @@ public class CarManagerController {
 
     @GetMapping("/checkCarAvailability")
     public String checkCarAvailability(RedirectAttributes redirectAttributes) {
+        revertSessionChanges();
         if(carService.checkCarAvailability()) {
             return "redirect:/searchCustomer";
         }else {
@@ -99,7 +107,7 @@ public class CarManagerController {
         var p = personService.findPerson(person);
         if(p.isPresent()) {
             rentAdd.newRent();
-            rentAdd.getRent().setPerson(objectMapper.mapPersonToPersonDTO(p.get()));
+            rentAdd.setPerson(p.get());
             return "redirect:/displayCars";
         }else {
             redirectAttributes.addFlashAttribute("message", "Customer doesn't exist<br>Input correct data");
@@ -109,7 +117,7 @@ public class CarManagerController {
 
     @GetMapping("/displayCars")
     public String displayCars(Model model) {
-        System.out.println(rentAdd.getRent());
+
         List<CarDTO> cars = carService.getAvailableCars();
         model.addAttribute("cars", cars);
         return "displayCars";
@@ -127,7 +135,6 @@ public class CarManagerController {
         }
 
         LocalDate ed = LocalDate.parse(endDate);
-
         if (ed.isBefore(LocalDate.now())) {
             redirectAttributes.addFlashAttribute("message", "End date cannot be in the past");
             redirectAttributes.addFlashAttribute("uri", "/displayCars");
@@ -136,25 +143,20 @@ public class CarManagerController {
         }
 
         List<Integer> notAvailableCars = carService.checkCarsAvailability(cars);
-        System.out.println("Not available cars" + notAvailableCars);
         if(!notAvailableCars.isEmpty()) {
             List<CarDTO> carsDTO = new ArrayList<>();
             for (Integer carId : notAvailableCars) {
-                carsDTO.add(carService.getCarById(carId));
+                carsDTO.add(objectMapper.mapCarToCarDTO(carService.getCarById(carId)));
             }
-            System.out.println("Not available cars" + carsDTO);
             redirectAttributes.addFlashAttribute("notAvailableCars", carsDTO);
             return "redirect:/errorCarsNotAvailable";
         }else {
-            Set<CarDTO> carsDTO = new HashSet<>();
+            Set<Car> carsDTO = new HashSet<>();
             for (Integer carId : cars) {
                 carService.changeCarStateTo(CarStatus.RESERVED, carId);
                 carsDTO.add(carService.getCarById(carId));
             }
-            rentAdd.getRent().setRentedCars(carsDTO);
-            rentAdd.getRent().setRentDate(LocalDate.now());
-            rentAdd.getRent().setReturnDate(ed);
-
+            rentAdd.setRentData(carsDTO, LocalDate.now(), ed);
             return "redirect:/displayInsurances";
         }
     }
@@ -178,7 +180,7 @@ public class CarManagerController {
             var insurance = insuranceService.getInsuranceById(Integer.parseInt(insuranceId));
 
             if(insurance != null) {
-                rentAdd.getRent().setInsurance(objectMapper.mapInsuranceToInsuranceDTO(insurance));
+                rentAdd.setInsurance(insurance);
             }else {
                 throw new IllegalArgumentException("Insurance doesn't exist");
             }
@@ -211,7 +213,7 @@ public class CarManagerController {
 
             var discount = discountService.getDiscountById(Integer.parseInt(discountId));
             discount.ifPresentOrElse(
-                    value -> rentAdd.getRent().setDiscount(objectMapper.mapDiscountToDiscountDTO(value)),
+                    value -> rentAdd.setDiscount(value),
                     () -> { throw new IllegalArgumentException("Discount doesn't exist"); }
             );
         }
@@ -220,13 +222,23 @@ public class CarManagerController {
     }
 
     @GetMapping("/saveRent")
-    public String saveRent(Model model) {
+    public String saveRent(RedirectAttributes redirectAttributes) {
         if(rentAdd.getRent() == null) {
             return "redirect:/errorPage";
         }
-        rentService.saveNewRent(rentAdd.getRent());
+        int id = -1;
+        try {
+            id = rentService.saveNewRent(rentAdd.getRent());
+        } catch (Exception e) {
+            rentAdd.removeRent();
+            redirectAttributes.addFlashAttribute("message", "Unable to save new rent");
+            redirectAttributes.addFlashAttribute("uri", "/");
+            redirectAttributes.addFlashAttribute("buttonText", "Go back to main page");
+            return "redirect:/errorPage";
+        }
 
-        return "redirect:/rent/";
+        rentAdd.removeRent();
+        return "redirect:/rent/" + id;
     }
 
     @GetMapping("/errorPage")
@@ -235,5 +247,20 @@ public class CarManagerController {
             model.addAttribute("message", "Internal server error");
         }
         return "error";
+    }
+
+    private void revertCarStateChanges() {
+        if(rentAdd.getRent() != null && rentAdd.getRent().getCars() != null) {
+            System.out.println("Reverting cars states");
+            for (Car car : rentAdd.getRent().getCars()) {
+                carService.changeCarStateTo(CarStatus.AVAILABLE, car.getId());
+            }
+            rentAdd.getRent().setCars(null);
+        }
+    }
+
+    private void revertSessionChanges() {
+        revertCarStateChanges();
+        rentAdd.removeRent();
     }
 }

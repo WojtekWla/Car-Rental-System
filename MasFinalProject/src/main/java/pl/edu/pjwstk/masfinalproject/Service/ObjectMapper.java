@@ -52,6 +52,16 @@ public class ObjectMapper {
         }
         Set<CarDTO> result = Collections.unmodifiableSet(carDTOs);
 
+        DiscountDTO discountDTO = null;
+        if(rent.getDiscount() != null) {
+            discountDTO = mapDiscountToDiscountDTO(rent.getDiscount());
+        }
+
+        InsuranceDTO insuranceDTO = null;
+        if(rent.getInsurance() != null) {
+            insuranceDTO = mapInsuranceToInsuranceDTO(rent.getInsurance());
+        }
+
         return new RentDTO(
                 rent.getId(),
                 rent.getStartDate(),
@@ -59,8 +69,8 @@ public class ObjectMapper {
                 rent.getPrice(),
                 rent.getFinalPrice(),
                 result,
-                mapDiscountToDiscountDTO(rent.getDiscount()),
-                mapInsuranceToInsuranceDTO(rent.getInsurance()),
+                discountDTO,
+                insuranceDTO,
                 mapPersonToPersonDTO(rent.getPerson())
         );
     }

@@ -1,9 +1,6 @@
 package pl.edu.pjwstk.masfinalproject.Model.Person.Employee;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import lombok.*;
@@ -26,6 +23,6 @@ public abstract class Employee extends Person {
     @Past(message = "hire date must be in the past")
     private LocalDate hireDate;
 
-    @OneToOne(mappedBy = "employee")
+    @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
     private TypeOfContract typeOfContract;
 }

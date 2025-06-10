@@ -20,4 +20,8 @@ public class PersonService {
     {
         return personRepository.findPersonByNameAndSurnameAndPesel(personDTO.getName(), personDTO.getSurname(), personDTO.getPesel());
     }
+
+    public void save(Person person) {
+        personRepository.save(person);
+    }
 }

@@ -18,27 +18,29 @@
     </div>
 
     <h1>Cars</h1>
-    <table>
-            <thead>
-            <tr>
-                <th>Brand</th>
-                <th>Model</th>
-                <th>Car type</th>
-                <th>Car status</th>
-                <th>Link to car</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="car : ${cars}">
-                <td th:text="${car.getBrand()}"></td>
-                <td th:text="${car.getModel()}"></td>
-                <td th:text="${car.getCarType()}"></td>
-                <td th:text="${car.getCarStatus()}"></td>
-                <td>
-                    <a th:href="|/car/${car.getId()}|">Go to car's rents</a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+    <div class="content-wrapper">
+        <table>
+                <thead>
+                <tr>
+                    <th>Brand</th>
+                    <th>Model</th>
+                    <th>Car type</th>
+                    <th>Car status</th>
+                    <th>Link to car</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="car : ${cars}">
+                    <td th:text="${car.getBrand()}"></td>
+                    <td th:text="${car.getModel()}"></td>
+                    <td th:text="${car.getCarType()}"></td>
+                    <td th:text="${car.getCarStatus()}"></td>
+                    <td>
+                        <a th:href="|/car/${car.getId()}|">Go to car's rents</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+    </div>
     </body>
 </html>

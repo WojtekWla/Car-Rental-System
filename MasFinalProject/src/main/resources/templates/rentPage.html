@@ -24,6 +24,13 @@
             <p><span class="label">Price (without discount and insurance):</span> <span th:text="${rent.getPrice()}"></span></p>
         </div>
 
+        <div class="section">
+            <h2>Person's details</h2>
+            <p><span class="label">Name:</span> <span th:text="${rent.getPerson().getName()}"></span></p>
+            <p><span class="label">Surname:</span> <span th:text="${rent.getPerson().getSurname()}"></span></p>
+            <p><span class="label">PESEL:</span> <span th:text="${rent.getPerson().getPesel()}"></span></p>
+        </div>
+
         <div class="section" th:if="${rent.getDiscount() != null}">
             <h2>Discount</h2>
             <p><span class="label">Type of discount:</span> <span th:text="${rent.getDiscount().getTypeOfDiscount()}"></span></p>
@@ -55,6 +62,10 @@
             <p th:if="${rent.getDiscount() != null}"><span class="label">Discount:</span> <span th:text="${rent.getDiscount().getTypeOfDiscount()}"></span></p>
         </div>
 
+        <div class="center">
+            <a class="go-back-link" th:href="@{/}">Go to main page</a>
+        </div>
     </div>
+
 </body>
 </html>

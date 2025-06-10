@@ -29,7 +29,7 @@ public class Discount {
     @Max(value = 90, message = "discount can be up to 90%")
     private int percentage;
 
-    @OneToMany(mappedBy = "discount", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "discount", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<Rent> rents;

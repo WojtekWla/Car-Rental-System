@@ -52,7 +52,6 @@ public class InsertToDatabase {
 
         FullTime adminContract = FullTime.builder()
                 .salary(4800)
-                .bonus(600)
                 .build();
 
         Admin admin = Admin.builder()
@@ -66,11 +65,13 @@ public class InsertToDatabase {
                 .residentialAddress("321 Pine St, Leeds")
                 .hireDate(LocalDate.of(2018, 9, 5))
                 .assignedRegion("Northern Region")
+                .typeOfContract(adminContract)
                 .build();
 
 
         PartTime consultantContract1 = PartTime.builder()
                 .hoursPerWeek(25)
+                .hourlySalary(30)
                 .terminationDate(LocalDate.now().plusMonths(2))
                 .build();
 
@@ -86,6 +87,7 @@ public class InsertToDatabase {
                 .hireDate(LocalDate.of(2020, 3, 1))
                 .languages(List.of("English", "German"))
                 .position("Senior Consultant")
+                .typeOfContract(consultantContract1)
                 .build();
 
 
@@ -107,10 +109,12 @@ public class InsertToDatabase {
                 .hireDate(LocalDate.of(2019, 7, 20))
                 .languages(List.of("English", "Spanish"))
                 .position("Consultant")
+                .typeOfContract(consultantContract2)
                 .build();
 
         PartTime consultantContract3 = PartTime.builder()
                 .hoursPerWeek(30)
+                .hourlySalary(20)
                 .terminationDate(LocalDate.now().plusWeeks(8))
                 .build();
 
@@ -126,41 +130,52 @@ public class InsertToDatabase {
                 .hireDate(LocalDate.of(2021, 2, 10))
                 .languages(List.of("English", "French"))
                 .position("Junior Consultant")
+                .typeOfContract(consultantContract3)
                 .build();
 
 
-
-        adminRepository.save(admin);
-        fullTimeRepository.save(adminContract);
-
-        consultantRepository.save(consultant1);
-        consultantRepository.save(consultant2);
-        consultantRepository.save(consultant3);
-
-        partTimeRepository.save(consultantContract1);
-        fullTimeRepository.save(consultantContract2);
-        partTimeRepository.save(consultantContract3);
-
         adminContract.setEmployee(admin);
-        consultantContract3.setEmployee(consultant3);
+        adminRepository.save(admin);
+
+//        fullTimeRepository.save(adminContract);
+
+
         consultantContract1.setEmployee(consultant1);
         consultantContract2.setEmployee(consultant2);
-
-        admin.setTypeOfContract(adminContract);
-        consultant1.setTypeOfContract(consultantContract1);
-        consultant2.setTypeOfContract(consultantContract2);
-        consultant3.setTypeOfContract(consultantContract3);
-
-        adminRepository.save(admin);
-        fullTimeRepository.save(adminContract);
+        consultantContract3.setEmployee(consultant3);
 
         consultantRepository.save(consultant1);
         consultantRepository.save(consultant2);
         consultantRepository.save(consultant3);
 
-        partTimeRepository.save(consultantContract1);
-        fullTimeRepository.save(consultantContract2);
-        partTimeRepository.save(consultantContract3);
+//        consultantContract1.setEmployee(consultant1);
+//        consultantContract2.setEmployee(consultant2);
+//        consultantContract3.setEmployee(consultant3);
+//        partTimeRepository.save(consultantContract1);
+//        fullTimeRepository.save(consultantContract2);
+//        partTimeRepository.save(consultantContract3);
+
+
+//        adminContract.setEmployee(admin);
+//        consultantContract3.setEmployee(consultant3);
+//        consultantContract1.setEmployee(consultant1);
+//        consultantContract2.setEmployee(consultant2);
+//
+//        admin.setTypeOfContract(adminContract);
+//        consultant1.setTypeOfContract(consultantContract1);
+//        consultant2.setTypeOfContract(consultantContract2);
+//        consultant3.setTypeOfContract(consultantContract3);
+
+//        adminRepository.save(admin);
+//        fullTimeRepository.save(adminContract);
+//
+//        consultantRepository.save(consultant1);
+//        consultantRepository.save(consultant2);
+//        consultantRepository.save(consultant3);
+//
+//        partTimeRepository.save(consultantContract1);
+//        fullTimeRepository.save(consultantContract2);
+//        partTimeRepository.save(consultantContract3);
 
 
         Customer customer1 = Customer.builder()
@@ -380,59 +395,5 @@ public class InsertToDatabase {
         reviewRepository.save(review1);
         reviewRepository.save(review2);
 
-    }
-
-    public void getData() {
-        getEmployees();
-        getUsers();
-
-        getRents();
-
-        getReviews();
-        getServices();
-    }
-
-    public void getEmployees() {
-        Iterable<Employee> employees = employeeRepository.findAll();
-        employees.forEach(System.out::println);
-    }
-
-    public void getUsers() {
-        Iterable<Customer> users =  customerRepository.findAll();
-        users.forEach(System.out::println);
-    }
-
-    public void getRents() {
-        System.out.println("Rents");
-        Iterable<Rent> rents = rentRepository.findAll();
-        rents.forEach(rent -> {
-            System.out.println(rent);
-            System.out.println("Person: " + rent.getPerson());
-            System.out.println("Discount: " + rent.getDiscount());
-            System.out.println("Insurance: " + rent.getInsurance());
-            Iterable<Car> cars = carRepository.findByRentId(rent.getId());
-            System.out.println("Cars: " + cars);
-        });
-    }
-
-    public void getReviews() {
-        System.out.println("Review");
-        Iterable<Review> reviews = reviewRepository.findAll();
-        reviews.forEach(review -> {
-            System.out.println(review);
-            System.out.println("Car: " + review.getCar());
-            System.out.println("Person: " + review.getPerson());
-        });
-    }
-
-    public void getServices()
-    {
-        System.out.println("Service, mechanic, car");
-        Iterable<Service> services = serviceRepository.findAll();
-        services.forEach(service -> {
-            System.out.println(service);
-            System.out.println("Car: " + service.getCar());
-            System.out.println("Mechanic: " + service.getMechanic());
-        });
     }
 }

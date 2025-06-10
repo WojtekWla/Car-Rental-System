@@ -30,20 +30,19 @@ public class DiscountService {
         return discountRepository.findById(id);
     }
 
-    public boolean validatePerson(PersonDTO personDTO, Integer discountId) {
+    public boolean validatePerson(Person person, Integer discountId) {
         var discount = this.getDiscountById(discountId);
         if(discount.isPresent()) {
-            var person = personService.findPerson(personDTO);
             boolean validated;
-            if(person.isPresent()) {
-                validated = discountValidator.validatePerson(person.get(), discount.get().getTypeOfDiscount());
-            } else {
-                throw new IllegalArgumentException("Person doesn't exist");
-            }
+            validated = discountValidator.validatePerson(person, discount.get().getTypeOfDiscount());
             return validated;
         }
 
         return false;
+    }
+
+    public void save(Discount discount) {
+        discountRepository.save(discount);
     }
 
 }

@@ -23,10 +23,10 @@
                 <h1>Internal server error</h1>
             </div>
             <div th:if="${uri != null}">
-                <a class="button" th:href="@{${uri}}" th:text="${buttonText}"></a>
+                <a class="go-back-link" th:href="@{${uri}}" th:text="${buttonText}"></a>
             </div>
             <div th:unless="${uri}">
-                <a class="button" th:href="@{/}">Go to main page</a>
+                <a class="go-back-link" th:href="@{/}">Go to main page</a>
             </div>
         </div>
     </div>

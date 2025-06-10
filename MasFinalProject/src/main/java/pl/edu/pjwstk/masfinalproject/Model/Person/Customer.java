@@ -20,4 +20,15 @@ public class Customer extends Person{
 
     @Nullable
     private String billingAddress;
+
+    public void addPoints(int points) {
+        this.points += points;
+    }
+
+    public void deductPoints(int points) {
+        if(points > this.points) {
+            throw new IllegalArgumentException("Points cannot be negative");
+        }
+        this.points -= points;
+    }
 }
