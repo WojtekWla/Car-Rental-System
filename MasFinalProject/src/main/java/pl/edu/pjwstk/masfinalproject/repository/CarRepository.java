@@ -26,4 +26,12 @@ public interface CarRepository extends CrudRepository<Car, Integer> {
     @Modifying
     @Query("UPDATE Car c SET c.carStatus = :status WHERE c.id = :id")
     void updateCarStatus(@Param("status") CarStatus carStatus, @Param("id") int id);
+
+    @Query("SELECT c FROM Car c WHERE c.travelledDistanceToService >= :distance")
+    List<Car> getCarsDistanceToService(@Param("distance") int distance);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE Car c SET c.carStatus = :status, c.travelledDistanceToService = :distance WHERE c.id = :id")
+    void updateCarStatusAndTravelledDistance(@Param("status") CarStatus carStatus, @Param("distance") int distance, @Param("id") int id);
 }

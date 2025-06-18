@@ -26,7 +26,7 @@ public class Car {
     private int id;
 
     @Positive(message = "maximum distance to service must be positive")
-    private static int maximumDistanceToService = 10000;
+    public static int maximumDistanceToService = 10000;
 
     @NotNull(message = "brand cannot be null")
     @NotBlank(message = "brand cannot be empty")
@@ -48,7 +48,7 @@ public class Car {
     private CarType carType;
 
     @Positive(message = "travelled distance cannot be negative")
-    private int travelledDistance;
+    private int travelledDistanceToService;
 
     @NotNull(message = "engines cannot be null")
     @Size(min = 1, max = 2, message = "car has to have at least one engine and up to two engines (one oil and one electric)")

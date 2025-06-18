@@ -3,6 +3,7 @@ package pl.edu.pjwstk.masfinalproject.Service;
 import org.springframework.stereotype.Component;
 import pl.edu.pjwstk.masfinalproject.DTO.*;
 import pl.edu.pjwstk.masfinalproject.Model.Car.Car;
+import pl.edu.pjwstk.masfinalproject.Model.Car.EngineType;
 import pl.edu.pjwstk.masfinalproject.Model.Discount;
 import pl.edu.pjwstk.masfinalproject.Model.Insurance;
 import pl.edu.pjwstk.masfinalproject.Model.Person.Person;
@@ -15,13 +16,45 @@ import java.util.stream.Collectors;
 @Component
 public class ObjectMapper {
     public CarDTO mapCarToCarDTO(Car car) {
+        if(car.getEngines().contains(EngineType.ElectricEngine)) {
+            return new CarDTO(
+                    car.getId(),
+                    car.getBrand(),
+                    car.getModel(),
+                    car.getCarType(),
+                    car.getRentPrice(),
+                    car.getCarStatus(),
+                    List.of("Electric engine"),
+                    car.getMaximumRange() + " km",
+                    null,
+                    null
+            );
+        }else if(car.getEngines().contains(EngineType.OilEngine)) {
+           return new CarDTO(
+                   car.getId(),
+                    car.getBrand(),
+                    car.getModel(),
+                    car.getCarType(),
+                    car.getRentPrice(),
+                    car.getCarStatus(),
+                    List.of("Oil engine"),
+                    null,
+                    car.getBenzineType(),
+                    car.getManufacturerName()
+           );
+        }
+
         return new CarDTO(
                 car.getId(),
                 car.getBrand(),
                 car.getModel(),
                 car.getCarType(),
                 car.getRentPrice(),
-                car.getCarStatus()
+                car.getCarStatus(),
+                List.of("Electric engine", "Oil engine"),
+                car.getMaximumRange() + " km",
+                car.getBenzineType(),
+                car.getManufacturerName()
         );
     }
 
@@ -81,15 +114,6 @@ public class ObjectMapper {
                 .toList();
     }
 
-//    public Rent mapToRent(RentDTO rentDTO) {
-//        return new Rent(
-//                rentDTO.getRentDate(),
-//                rentDTO.getReturnDate(),
-//                rentDTO.getPerson(),
-//                rentDTO.getDiscount(),
-//                rentDTO.getRentedCars()
-//        );
-//    }
 
     public PersonDTO mapPersonToPersonDTO(Person person) {
         return new PersonDTO(

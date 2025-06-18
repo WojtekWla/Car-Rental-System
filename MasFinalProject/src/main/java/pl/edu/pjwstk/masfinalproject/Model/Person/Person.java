@@ -40,7 +40,7 @@ public abstract class Person {
 
     @NotNull(message = "email cannot be null")
     @Size(min = 3, message = "email must contain at least 3 letters")
-    @Email(message = "must be in email format")
+    @Email(message = "email must be in correct format")
     protected String email;
 
     @NotNull(message = "birth date cannot be null")
@@ -55,12 +55,6 @@ public abstract class Person {
     @NotBlank(message = "residential address cannot be empty")
     protected String residentialAddress;
 
-    //associations
-
-    @OneToMany(mappedBy = "person", fetch = FetchType.LAZY)
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private Set<Review> reviews;
 
     @OneToMany(mappedBy = "person", fetch = FetchType.LAZY)
     @ToString.Exclude

@@ -18,6 +18,11 @@
             <p><span class="label">Brand:</span> <span th:text="${car.getBrand()}"></span></p>
             <p><span class="label">Model:</span> <span th:text="${car.getModel()}"></span></p>
             <p><span class="label">Type of car:</span> <span th:text="${car.getCarType()}"></span></p>
+            <p th:if="${car.getEngineTypes().contains('Oil engine')}"><span class="label">Oil engine:</span> <span>Oil engine</span></p>
+            <p th:if="${car.getEngineTypes().contains('Oil engine')}"><span class="label">Benzine type:</span> <span th:text="${car.getBenzineType()}"></span></p>
+            <p th:if="${car.getEngineTypes().contains('Oil engine')}"><span class="label">Engine manufacturer:</span> <span th:text="${car.getManufacturerName()}"></span></p>
+            <p th:if="${car.getEngineTypes().contains('Electric engine')}"><span class="label">Electric engine:</span> <span>Electric engine</span></p>
+            <p th:if="${car.getEngineTypes().contains('Electric engine')}"><span class="label">Maximum travel distance:</span> <span th:text="${car.getMaximumRange()}"></span></p>
             <p><span class="label">Status:</span> <span th:text="${car.getCarStatus()}"></span></p>
             <p><span class="label">Rent price:</span> <span th:text="${car.getRentPrice()}"></span></p>
         </div>

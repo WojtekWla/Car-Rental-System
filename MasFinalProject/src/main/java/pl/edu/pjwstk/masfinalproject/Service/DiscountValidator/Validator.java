@@ -1,12 +1,10 @@
-package pl.edu.pjwstk.masfinalproject.Service.Validator;
+package pl.edu.pjwstk.masfinalproject.Service.DiscountValidator;
 
 import org.springframework.stereotype.Service;
 import pl.edu.pjwstk.masfinalproject.Model.Person.Person;
-import pl.edu.pjwstk.masfinalproject.Service.Validator.Validators.GoldenMemberDiscountValidator;
-import pl.edu.pjwstk.masfinalproject.Service.Validator.Validators.PlatinumMemberDiscountValidator;
-import pl.edu.pjwstk.masfinalproject.Service.Validator.Validators.SeasonalDiscountValidator;
-import pl.edu.pjwstk.masfinalproject.Service.Validator.Validators.SeniorDiscountValidator;
-import pl.edu.pjwstk.masfinalproject.repository.CustomerRepository;
+import pl.edu.pjwstk.masfinalproject.Service.DiscountValidator.Validators.GoldenMemberDiscountValidator;
+import pl.edu.pjwstk.masfinalproject.Service.DiscountValidator.Validators.PlatinumMemberDiscountValidator;
+import pl.edu.pjwstk.masfinalproject.Service.DiscountValidator.Validators.SeniorDiscountValidator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +15,6 @@ public class Validator {
 
 
     public Validator() {
-        validators.put("Seasonal Discount", new SeasonalDiscountValidator());
         validators.put("Senior discount", new SeniorDiscountValidator());
         validators.put("Golden Member Discount", new GoldenMemberDiscountValidator());
         validators.put("Platinum Member Discount", new PlatinumMemberDiscountValidator());

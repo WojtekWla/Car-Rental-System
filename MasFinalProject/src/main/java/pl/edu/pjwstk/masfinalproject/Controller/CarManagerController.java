@@ -10,16 +10,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.edu.pjwstk.masfinalproject.DTO.CarDTO;
-import pl.edu.pjwstk.masfinalproject.DTO.InsuranceDTO;
 import pl.edu.pjwstk.masfinalproject.DTO.PersonDTO;
 import pl.edu.pjwstk.masfinalproject.DTO.RentDTO;
 import pl.edu.pjwstk.masfinalproject.Model.Car.Car;
 import pl.edu.pjwstk.masfinalproject.Model.Discount;
 import pl.edu.pjwstk.masfinalproject.Model.Enum.CarStatus;
 import pl.edu.pjwstk.masfinalproject.Model.Insurance;
-import pl.edu.pjwstk.masfinalproject.Model.Person.Person;
+import pl.edu.pjwstk.masfinalproject.Model.Person.Customer;
+import pl.edu.pjwstk.masfinalproject.Model.Review;
 import pl.edu.pjwstk.masfinalproject.Service.*;
-import pl.edu.pjwstk.masfinalproject.Service.Validator.Validator;
 import pl.edu.pjwstk.masfinalproject.Session.RentAdd;
 
 import java.time.LocalDate;
@@ -34,22 +33,20 @@ public class CarManagerController {
     private final PersonService personService;
     private final InsuranceService insuranceService;
     private final DiscountService discountService;
-    private final EmployeeService employeeService;
+    private final ReviewService reviewService;
 
     private final RentAdd rentAdd;
     private final ObjectMapper objectMapper;
 
+    @GetMapping("/add")
+    public String test(Model model) {
+        reviewService.removeReview(3);
 
+        return "redirect:/";
+    }
 
     @GetMapping("/")
     public String mainPage(Model model) {
-
-        try {
-            employeeService.changeToPartTimeEmployee(1, 11, 30, LocalDate.of(2030, 1,1));
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-
         revertSessionChanges();
         List<CarDTO> cars = carService.getAllCars();
         model.addAttribute("cars", cars);

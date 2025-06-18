@@ -1,23 +1,26 @@
 package pl.edu.pjwstk.masfinalproject.Service;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.edu.pjwstk.masfinalproject.Model.Person.Employee.Employee;
 import pl.edu.pjwstk.masfinalproject.Model.Person.Employee.TypeOfContract.FullTime;
 import pl.edu.pjwstk.masfinalproject.Model.Person.Employee.TypeOfContract.PartTime;
 import pl.edu.pjwstk.masfinalproject.Model.Person.Employee.TypeOfContract.TypeOfContract;
 import pl.edu.pjwstk.masfinalproject.repository.EmployeeRepository;
-import pl.edu.pjwstk.masfinalproject.repository.FullTimeRepository;
-import pl.edu.pjwstk.masfinalproject.repository.PartTimeRepository;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
 public class EmployeeService {
     private final EmployeeRepository employeeRepository;
-    private final FullTimeRepository fullTimeRepository;
-    private final PartTimeRepository partTimeRepository;
+    private final RentService rentService;
+    private final Validator validator;
 
     public void changeToFullTimeEmployee(int employeeId, int salary, Integer bonus) throws Exception {
         var e = employeeRepository.findById(employeeId);
@@ -53,6 +56,36 @@ public class EmployeeService {
         employee.setTypeOfContract(contract);
         contract.setEmployee(employee);
         employeeRepository.save(employee);
+    }
+
+    public List<String> addEmployeeAccount(Employee employee, TypeOfContract typeOfContract) {
+        if(employee == null) {
+            return List.of("employee cannot be null");
+        }
+        if(typeOfContract == null) {
+            return List.of("type of contract cannot be null");
+        }
+
+        Set<ConstraintViolation<Employee>> violations = validator.validate(employee);
+        if(!violations.isEmpty()) {
+            return violations.stream().map(ConstraintViolation::getMessage).toList();
+        }
+
+        Set<ConstraintViolation<TypeOfContract>> typeOfContractViolations = validator.validate(typeOfContract);
+        if(!typeOfContractViolations.isEmpty()) {
+            return typeOfContractViolations.stream().map(ConstraintViolation::getMessage).toList();
+        }
+
+        typeOfContract.setEmployee(employee);
+        employee.setTypeOfContract(typeOfContract);
+        employeeRepository.save(employee);
+        return null;
+    }
+
+    @Transactional
+    public void removeEmployeeAccount(Employee employee) {
+        rentService.removePersonRents(employee);
+        employeeRepository.delete(employee);
     }
 
 }

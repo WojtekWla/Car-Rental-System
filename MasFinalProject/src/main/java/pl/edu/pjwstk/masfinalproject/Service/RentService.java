@@ -1,6 +1,8 @@
 package pl.edu.pjwstk.masfinalproject.Service;
 
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import pl.edu.pjwstk.masfinalproject.DTO.CarDTO;
 import pl.edu.pjwstk.masfinalproject.DTO.RentDTO;
@@ -8,25 +10,20 @@ import pl.edu.pjwstk.masfinalproject.Model.Car.Car;
 import pl.edu.pjwstk.masfinalproject.Model.Discount;
 import pl.edu.pjwstk.masfinalproject.Model.Enum.CarStatus;
 import pl.edu.pjwstk.masfinalproject.Model.Insurance;
+import pl.edu.pjwstk.masfinalproject.Model.Person.Customer;
+import pl.edu.pjwstk.masfinalproject.Model.Person.Person;
 import pl.edu.pjwstk.masfinalproject.Model.Rent;
 import pl.edu.pjwstk.masfinalproject.repository.RentRepository;
 
 import java.util.*;
 
 @Service
+@AllArgsConstructor
 public class RentService {
-    private RentRepository rentRepository;
-    private PersonService personService;
-    private DiscountService discountService;
-    private InsuranceService insuranceService;
-    private CarService carService;
-    public RentService(RentRepository rentRepository, PersonService personService, DiscountService discountService, InsuranceService insuranceService, CarService carService) {
-        this.rentRepository = rentRepository;
-        this.personService = personService;
-        this.discountService = discountService;
-        this.insuranceService = insuranceService;
-        this.carService = carService;
-    }
+    private final RentRepository rentRepository;
+    private final CustomerService customerService;
+    private final CarService carService;
+
 
     public Set<Rent> getAllCarsRents(int carId) {
         return rentRepository.findRentByCarsContainingCar(carId);
@@ -39,12 +36,29 @@ public class RentService {
 
 
     @Transactional
-    public int saveNewRent(Rent rent) throws Exception {
+    public int saveNewRent(Rent rent) {
+        if(rent.getPerson() instanceof Customer) {
+            customerService.addPoints((Customer) rent.getPerson(), rent.getFinalPrice());
+        }
+
         for (Car car : rent.getCars()) {
             carService.changeCarStateTo(CarStatus.RENTED, car.getId());
         }
         Rent result = rentRepository.save(rent);
         return result.getId();
+    }
+
+    public void removePersonRents(Person person) {
+        rentRepository.deleteByPerson(person);
+    }
+
+    @Modifying
+    public void updateRent(Rent rent) {
+        rentRepository.save(rent);
+    }
+
+    public void removeRent(Rent rent) {
+        rentRepository.delete(rent);
     }
 
 }

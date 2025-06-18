@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import lombok.*;
 import pl.edu.pjwstk.masfinalproject.Model.Car.Car;
-import pl.edu.pjwstk.masfinalproject.Model.Person.Person;
+import pl.edu.pjwstk.masfinalproject.Model.Person.Customer;
 
 import java.time.LocalDate;
 
@@ -29,10 +29,10 @@ public class Review {
     private LocalDate publishDate;
 
     @ManyToOne
-    @JoinColumn(name = "person_id")
+    @JoinColumn(name = "customer_id")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private Person person;
+    private Customer customer;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "car_id", nullable = false, updatable = false)

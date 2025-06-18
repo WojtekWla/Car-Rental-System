@@ -1,7 +1,7 @@
-package pl.edu.pjwstk.masfinalproject.Service.Validator.Validators;
+package pl.edu.pjwstk.masfinalproject.Service.DiscountValidator.Validators;
 
 import pl.edu.pjwstk.masfinalproject.Model.Person.Person;
-import pl.edu.pjwstk.masfinalproject.Service.Validator.IValidator;
+import pl.edu.pjwstk.masfinalproject.Service.DiscountValidator.IValidator;
 
 import java.time.LocalDate;
 

@@ -9,5 +9,5 @@ public enum CarStatus {
     MALFUNCTION,
     SERVICE_REQUIRED,
     SERVICE,
-    TO_DESTROY
+    UNRECOVERABLE
 }

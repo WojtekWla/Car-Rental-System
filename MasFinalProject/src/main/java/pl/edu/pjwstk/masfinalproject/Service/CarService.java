@@ -8,7 +8,6 @@ import pl.edu.pjwstk.masfinalproject.repository.CarRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CarService {
@@ -49,6 +48,19 @@ public class CarService {
         return result;
     }
 
+    public List<Car> getCarsToService() {
+        return carRepository.getCarsByCarStatus(CarStatus.SERVICE_REQUIRED);
+    }
+
+    public List<Car> getCarsWithDistanceToService() {
+        return carRepository.getCarsDistanceToService(1000);
+
+    }
+
+    public void sendToService(CarStatus carStatus, int distance, int carId) {
+        carRepository.updateCarStatusAndTravelledDistance(carStatus, distance, carId);
+    }
+
     public List<Integer> checkCarsAvailability(List<Integer> cars) {
         List<Integer> notAvailableCars = new ArrayList<>();
         for(Integer carId : cars) {
@@ -65,8 +77,5 @@ public class CarService {
         carRepository.updateCarStatus(carStatus, carId);
     }
 
-    public void save(Car car) {
-        carRepository.save(car);
-    }
 
 }

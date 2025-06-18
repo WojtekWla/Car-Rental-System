@@ -5,8 +5,10 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import pl.edu.pjwstk.masfinalproject.Model.Review;
 
 import java.util.List;
+import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -27,6 +29,11 @@ public class Consultant extends Employee{
     @NotNull(message = "position cannot be null")
     @NotEmpty(message = "position cannot be empty")
     private String position;
+
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Set<Review> reviews;
 
     public void addLanguage(String language) {
         if(languages == null || languages.isEmpty()) { throw new IllegalArgumentException("languages cannot be empty"); }

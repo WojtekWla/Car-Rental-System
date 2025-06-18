@@ -68,7 +68,6 @@ public class InsertToDatabase {
                 .typeOfContract(adminContract)
                 .build();
 
-
         PartTime consultantContract1 = PartTime.builder()
                 .hoursPerWeek(25)
                 .hourlySalary(30)
@@ -89,8 +88,6 @@ public class InsertToDatabase {
                 .position("Senior Consultant")
                 .typeOfContract(consultantContract1)
                 .build();
-
-
 
         FullTime consultantContract2 = FullTime.builder()
                 .salary(5200)
@@ -133,12 +130,8 @@ public class InsertToDatabase {
                 .typeOfContract(consultantContract3)
                 .build();
 
-
         adminContract.setEmployee(admin);
         adminRepository.save(admin);
-
-//        fullTimeRepository.save(adminContract);
-
 
         consultantContract1.setEmployee(consultant1);
         consultantContract2.setEmployee(consultant2);
@@ -147,36 +140,6 @@ public class InsertToDatabase {
         consultantRepository.save(consultant1);
         consultantRepository.save(consultant2);
         consultantRepository.save(consultant3);
-
-//        consultantContract1.setEmployee(consultant1);
-//        consultantContract2.setEmployee(consultant2);
-//        consultantContract3.setEmployee(consultant3);
-//        partTimeRepository.save(consultantContract1);
-//        fullTimeRepository.save(consultantContract2);
-//        partTimeRepository.save(consultantContract3);
-
-
-//        adminContract.setEmployee(admin);
-//        consultantContract3.setEmployee(consultant3);
-//        consultantContract1.setEmployee(consultant1);
-//        consultantContract2.setEmployee(consultant2);
-//
-//        admin.setTypeOfContract(adminContract);
-//        consultant1.setTypeOfContract(consultantContract1);
-//        consultant2.setTypeOfContract(consultantContract2);
-//        consultant3.setTypeOfContract(consultantContract3);
-
-//        adminRepository.save(admin);
-//        fullTimeRepository.save(adminContract);
-//
-//        consultantRepository.save(consultant1);
-//        consultantRepository.save(consultant2);
-//        consultantRepository.save(consultant3);
-//
-//        partTimeRepository.save(consultantContract1);
-//        fullTimeRepository.save(consultantContract2);
-//        partTimeRepository.save(consultantContract3);
-
 
         Customer customer1 = Customer.builder()
                 .name("Alice")
@@ -201,12 +164,6 @@ public class InsertToDatabase {
                 .gender("Male")
                 .residentialAddress("123 Green St")
                 .points(300)
-                .build();
-
-        Discount summerDiscount = Discount.builder()
-                .typeOfDiscount("Seasonal")
-                .description("Summer sale discount for all vehicle types")
-                .percentage(10)
                 .build();
 
         Discount seniorDiscount = Discount.builder()
@@ -245,7 +202,7 @@ public class InsertToDatabase {
                 .rentPrice(200)
                 .carStatus(CarStatus.AVAILABLE)
                 .carType(CarType.COMBI)
-                .travelledDistance(5000)
+                .travelledDistanceToService(5000)
                 .engines(EnumSet.of(EngineType.OilEngine))
                 .benzineType("95")
                 .manufacturerName("Toyota Motors")
@@ -257,7 +214,7 @@ public class InsertToDatabase {
                 .rentPrice(300)
                 .carStatus(CarStatus.AVAILABLE)
                 .carType(CarType.SUV)
-                .travelledDistance(7000)
+                .travelledDistanceToService(700)
                 .engines(EnumSet.of(EngineType.OilEngine))
                 .benzineType("98")
                 .manufacturerName("BMW Group")
@@ -269,7 +226,7 @@ public class InsertToDatabase {
                 .rentPrice(400)
                 .carStatus(CarStatus.AVAILABLE)
                 .carType(CarType.SPORT)
-                .travelledDistance(1000)
+                .travelledDistanceToService(100)
                 .engines(EnumSet.of(EngineType.ElectricEngine))
                 .maximumRange(500)
                 .build();
@@ -280,7 +237,7 @@ public class InsertToDatabase {
                 .rentPrice(250)
                 .carStatus(CarStatus.AVAILABLE)
                 .carType(CarType.SPORT)
-                .travelledDistance(3000)
+                .travelledDistanceToService(300)
                 .engines(EnumSet.of(EngineType.OilEngine, EngineType.ElectricEngine))
                 .benzineType("95")
                 .manufacturerName("Toyota Motors")
@@ -308,7 +265,7 @@ public class InsertToDatabase {
                 .startDate(LocalDate.now().plusDays(1))
                 .endDate(LocalDate.now().plusDays(5))
                 .person(customer1)
-                .discount(summerDiscount)
+                .discount(platinumMemberDiscount)
                 .insurance(basicInsurance)
                 .cars(Set.of(car1, car2))
                 .build();
@@ -317,14 +274,13 @@ public class InsertToDatabase {
                 .startDate(LocalDate.now().plusDays(10))
                 .endDate(LocalDate.now().plusDays(15))
                 .person(customer1)
-                .discount(summerDiscount)
+                .discount(goldenMemberDiscount)
                 .insurance(premiumInsurance)
                 .cars(Set.of(car3, car1))
                 .build();
 
         customerRepository.save(customer1);
         customerRepository.save(customer2);
-        discountRepository.save(summerDiscount);
         discountRepository.save(seniorDiscount);
         discountRepository.save(goldenMemberDiscount);
         discountRepository.save(platinumMemberDiscount);
@@ -354,14 +310,14 @@ public class InsertToDatabase {
         Review review1 = Review.builder()
                 .message("Great ride, smooth and efficient!")
                 .publishDate(LocalDate.now())
-                .person(customer1)
+                .customer(customer1)
                 .car(car1)
                 .build();
 
         Review review2 = Review.builder()
                 .message("Battery range could be better, but overall a nice experience.")
                 .publishDate(LocalDate.now())
-                .person(customer1)
+                .customer(customer1)
                 .car(car2)
                 .build();
 
@@ -394,6 +350,5 @@ public class InsertToDatabase {
         serviceRepository.save(service3);
         reviewRepository.save(review1);
         reviewRepository.save(review2);
-
     }
 }

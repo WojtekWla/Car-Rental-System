@@ -1,4 +1,4 @@
-package pl.edu.pjwstk.masfinalproject.Service.Validator;
+package pl.edu.pjwstk.masfinalproject.Service.DiscountValidator;
 
 import pl.edu.pjwstk.masfinalproject.Model.Person.Person;
 

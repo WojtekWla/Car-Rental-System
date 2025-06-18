@@ -1,26 +1,24 @@
 package pl.edu.pjwstk.masfinalproject.Service;
 
+import jakarta.validation.ConstraintViolation;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.edu.pjwstk.masfinalproject.DTO.PersonDTO;
 import pl.edu.pjwstk.masfinalproject.Model.Discount;
 import pl.edu.pjwstk.masfinalproject.Model.Person.Person;
-import pl.edu.pjwstk.masfinalproject.Service.Validator.Validator;
+import pl.edu.pjwstk.masfinalproject.Service.DiscountValidator.Validator;
 import pl.edu.pjwstk.masfinalproject.repository.DiscountRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
+@AllArgsConstructor
 public class DiscountService {
-    private DiscountRepository discountRepository;
-    private PersonService personService;
-    private Validator discountValidator;
-
-    public DiscountService(DiscountRepository discountRepository, PersonService personService, Validator discountValidator) {
-        this.discountRepository = discountRepository;
-        this.personService = personService;
-        this.discountValidator = discountValidator;
-    }
+    private final DiscountRepository discountRepository;
+    private final PersonService personService;
+    private final Validator discountValidator;
+    private final jakarta.validation.Validator validator;
 
     public List<Discount> getDiscounts() {
         return discountRepository.getAllDiscounts();
@@ -41,8 +39,14 @@ public class DiscountService {
         return false;
     }
 
-    public void save(Discount discount) {
+    public List<String> addNewDiscount(Discount discount) {
+        Set<ConstraintViolation<Discount>> violations = validator.validate(discount);
+        if(!violations.isEmpty()) {
+            return violations.stream().map(ConstraintViolation::getMessage).toList();
+        }
+
         discountRepository.save(discount);
+        return null;
     }
 
 }
